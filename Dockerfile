@@ -9,4 +9,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["sh", "-c", "alembic upgrade head && python start_bots.py"]
+RUN chmod +x /entrypoint.sh
+CMD ["/entrypoint.sh"]
