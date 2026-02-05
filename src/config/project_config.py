@@ -10,7 +10,6 @@ class Settings(BaseSettings):
     OPERATOR_TOKEN: str
     ADMINS: str
     ADMINS_1: str
-    ADMINS_2: str
     SERVICE_PORT: int
     SERVICE_TOKEN: str
     WEB_APP_URL: str
