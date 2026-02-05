@@ -43,7 +43,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
 async def menu(message: Message, state: FSMContext):
     await state.clear()
     message = await message.answer(start_message, reply_markup=create_menu())
-    await message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(
+    await message.answer("Или найдите чат в поиске", reply_markup=InlineKeyboardMarkup(
         row_width=1,
         inline_keyboard=[
             [
