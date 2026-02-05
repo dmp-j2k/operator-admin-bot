@@ -12,7 +12,6 @@ async def on_startup():
 class OperatorBot:
     def __init__(self):
         self.bot = Bot(token=settings.OPERATOR_TOKEN)
-        print("operator -", self.bot.get_me())
 
     def register_dispatcher(self, dp: Dispatcher):
         user_register.router.message.middleware(PermissionMiddleware(is_operator=False))
@@ -26,5 +25,6 @@ class OperatorBot:
     async def start_bot(self, dp: Dispatcher):
         self.register_dispatcher(dp)
         await self.bot.delete_webhook(drop_pending_updates=True)
+        print("operator -", await self.bot.get_me())
 
 operator_bot = OperatorBot()

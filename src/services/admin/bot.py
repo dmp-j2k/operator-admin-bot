@@ -26,7 +26,6 @@ async def on_startup(bot):
 class AdminBot:
     def __init__(self):
         self.bot = Bot(token=settings.ADMIN_TOKEN)
-        print("admin -", self.bot.get_me())
 
     def register_dispatcher(self, dp: Dispatcher):
         admin.router.message.middleware(PermissionMiddleware())
@@ -39,6 +38,7 @@ class AdminBot:
         self.register_dispatcher(dp)
         await check_admin_list()
         await self.bot.delete_webhook(drop_pending_updates=True)
+        print("admin -", await self.bot.get_me())
 
 
 admin_bot = AdminBot()
