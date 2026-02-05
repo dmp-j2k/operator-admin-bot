@@ -129,7 +129,8 @@ async def start_bot(message: Message | CallbackQuery):
 
 @router.message(F.text.lower() == 'добавить чаты')
 async def add_chat(message: Message):
-    link = 'https://t.me/helper_operator_bot?startgroup='
+    username = (await operator_bot.bot.get_me()).username
+    link = f'https://t.me/{username}?startgroup='
     await message.answer(f'Используйте ссылку ниже чтобы добавить бота в группу: {link}')
 
 
