@@ -6,7 +6,7 @@ services:
     network_mode: host
     restart: always
     environment:
-      REDIS_PORT: ${REDIS_PORT}
+      REDIS_URL: "redis://localhost:${REDIS_PORT}"
       ADMIN_TOKEN: ${ADMIN_TOKEN}
       OPERATOR_TOKEN: ${OPERATOR_TOKEN}
 
