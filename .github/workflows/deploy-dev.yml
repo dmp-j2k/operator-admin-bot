@@ -1,4 +1,4 @@
-name: Deploy Operator Admin
+name: Deploy Test Operator Admin
 on:
   push:
     branches:
