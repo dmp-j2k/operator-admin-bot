@@ -26,6 +26,7 @@ async def on_startup(bot):
 class AdminBot:
     def __init__(self):
         self.bot = Bot(token=settings.ADMIN_TOKEN)
+        print("admin -", self.bot.get_me())
 
     def register_dispatcher(self, dp: Dispatcher):
         admin.router.message.middleware(PermissionMiddleware())

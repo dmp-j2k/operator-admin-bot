@@ -12,6 +12,7 @@ async def on_startup():
 class OperatorBot:
     def __init__(self):
         self.bot = Bot(token=settings.OPERATOR_TOKEN)
+        print("operator -", self.bot.get_me())
 
     def register_dispatcher(self, dp: Dispatcher):
         user_register.router.message.middleware(PermissionMiddleware(is_operator=False))
