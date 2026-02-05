@@ -37,7 +37,7 @@ async def send_photo(
     token: None = Depends(verify_bearer_token) # pylint: disable=unused-argument
 ):
     bot = operator_bot.bot
-    state: FSMContext = await operator_dp.fsm.get_context(
+    state: FSMContext = operator_dp.fsm.get_context(
         bot=bot,
         chat_id=user_id,
         user_id=user_id,
