@@ -13,6 +13,7 @@ class PermissionMiddleware:
             data: Dict[str, Any]
     ) -> Any:
         user = await admin_service.exists(str(event.from_user.id))
+        print("USER ADMIN FOUND", user)
         if user:
             return await handler(event, data)
         return None
