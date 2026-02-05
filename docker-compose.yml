@@ -25,7 +25,6 @@ services:
       SERVICE_TOKEN: ${SERVICE_TOKEN}
   redis:
     image: redis:8.2
-    container_name: redis
     ports:
       - "${REDIS_PORT}:6379"
     volumes:
