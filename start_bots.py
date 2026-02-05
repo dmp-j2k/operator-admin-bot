@@ -3,6 +3,7 @@ import asyncio
 import uvicorn
 from aiogram import Dispatcher
 from aiogram.fsm.context import FSMContext
+from aiogram.fsm.storage.base import DefaultKeyBuilder
 from aiogram.fsm.storage.redis import RedisStorage
 from fastapi import FastAPI, HTTPException, Header, Depends
 
@@ -13,10 +14,12 @@ from src.services.admin.middlewares.album_middleware import AlbumMiddleware
 from src.services.admin.middlewares.log_middleware import LogMiddleware
 from src.services.operator_helper.bot import operator_bot
 
-redis_storage = RedisStorage.from_url(settings.REDIS_URL)
+key_builder = DefaultKeyBuilder(with_bot_id=True)
+redis_storage = RedisStorage.from_url(settings.REDIS_URL, key_builder=key_builder)
 
 app = FastAPI(title="OperatorBot API")
-dp = Dispatcher(storage=redis_storage)
+operator_dp = Dispatcher(storage=redis_storage)
+admins_dp = Dispatcher(storage=redis_storage)
 
 async def verify_bearer_token(authorization: str | None = Header(None)):
     if authorization is None or not authorization.startswith("Bearer "):
@@ -55,18 +58,24 @@ async def run_fastapi():
 
 
 async def start_bots_polling():
-    dp.message.outer_middleware(AlbumMiddleware())
-    dp.message.outer_middleware(LogMiddleware())
-    dp.callback_query.outer_middleware(LogMiddleware())
+    operator_dp.message.outer_middleware(AlbumMiddleware())
+    operator_dp.message.outer_middleware(LogMiddleware())
+    operator_dp.callback_query.outer_middleware(LogMiddleware())
 
-    await admin_bot.start_bot(dp)
-    await operator_bot.start_bot(dp)
+    admins_dp.message.outer_middleware(AlbumMiddleware())
+    admins_dp.message.outer_middleware(LogMiddleware())
+    admins_dp.callback_query.outer_middleware(LogMiddleware())
+
+    await admin_bot.start_bot(admins_dp)
+    await operator_bot.start_bot(operator_dp)
 
     loop = asyncio.get_running_loop()
     loop.create_task(run_fastapi())
 
-    await dp.start_polling(operator_bot.bot, admin_bot.bot)
-
+    await asyncio.gather(
+        operator_dp.start_polling(operator_bot.bot),
+        admins_dp.start_polling(admin_bot.bot),
+    )
 
 if __name__ == '__main__':
     asyncio.run(start_bots_polling())
