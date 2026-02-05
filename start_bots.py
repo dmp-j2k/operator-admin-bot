@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.redis import RedisStorage
 from fastapi import FastAPI, HTTPException, Header, Depends
 
-from services.operator_helper.handlers.operator import OrderSend
+from src.services.operator_helper.handlers.operator import OrderSend
 from src.config.project_config import settings
 from src.services.admin.bot import admin_bot
 from src.services.admin.middlewares.album_middleware import AlbumMiddleware

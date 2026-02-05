@@ -12,7 +12,7 @@ from aiogram.types import CallbackQuery, Message, InputMediaPhoto, InputMediaDoc
 
 from sqlalchemy.exc import IntegrityError
 
-from config.project_config import settings
+from src.config.project_config import settings
 from ..schemas.chat_schema import ChatBase, ChatCreate
 
 from src.use_cases.chat_keyboard_use_case import get_chat_keyboards
