@@ -7,12 +7,14 @@ from aiogram.fsm.storage.base import DefaultKeyBuilder
 from aiogram.fsm.storage.redis import RedisStorage
 from fastapi import FastAPI, HTTPException, Header, Depends
 
+from src.services.operator_helper.keyboards.operator_kb import back_to_choosing
 from src.services.operator_helper.handlers.operator import OrderSend
 from src.config.project_config import settings
 from src.services.admin.bot import admin_bot
 from src.services.admin.middlewares.album_middleware import AlbumMiddleware
 from src.services.admin.middlewares.log_middleware import LogMiddleware
 from src.services.operator_helper.bot import operator_bot
+from src.services.operator_helper.services.chat_service import chat_service
 
 key_builder = DefaultKeyBuilder(with_bot_id=True)
 redis_storage = RedisStorage.from_url(settings.REDIS_URL, key_builder=key_builder)
@@ -45,6 +47,14 @@ async def send_photo(
 
     await state.update_data({'chat_id': int(group_id)})
     await state.set_state(OrderSend.write_text)
+
+    chat = await chat_service.get(group_id)
+
+    await bot.send_message(
+        user_id,
+        f"Выбранный чат: {chat.name}\nТеперь отправьте ваше сообщение",
+        reply_markup=back_to_choosing()
+    )
 
     return {"status": "ok"}
 
