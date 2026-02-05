@@ -174,4 +174,4 @@ async def send_message_to_selected_chat(message: Message,
 
     await message.answer('Сообщение успешно отправлено!')
     await state.clear()
-    await activate_sender(message, state)
+    await menu(message, state)
