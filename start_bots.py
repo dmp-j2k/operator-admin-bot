@@ -33,11 +33,11 @@ async def verify_bearer_token(authorization: str | None = Header(None)):
 @app.get("/selectGroup")
 async def send_photo(
     user_id: int,
-    group_id: int,
+    group_id: str,
     token: None = Depends(verify_bearer_token) # pylint: disable=unused-argument
 ):
     bot = operator_bot.bot
-    state: FSMContext = await dp.fsm.get_context(
+    state: FSMContext = await operator_dp.fsm.get_context(
         bot=bot,
         chat_id=user_id,
         user_id=user_id,
