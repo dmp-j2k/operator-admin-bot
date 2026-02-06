@@ -38,6 +38,6 @@ jobs:
 
       - name: Build and run
         run: |
-          docker compose build
-          docker compose up -d --remove-orphans
+          docker compose -p operator-admin build
+          docker compose -p operator-admin --env-file .env up -d --remove-orphans
         
