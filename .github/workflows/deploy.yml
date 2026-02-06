@@ -16,6 +16,7 @@ jobs:
         run: |
           cat <<EOF > .env
           REDIS_PORT=${{ vars.REDIS_PORT }}
+          
           ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}
           OPERATOR_TOKEN=${{ secrets.OPERATOR_TOKEN }}
       
@@ -32,6 +33,7 @@ jobs:
       
           SERVICE_PORT=${{ vars.SERVICE_PORT }}
           SERVICE_TOKEN=${{ secrets.SERVICE_TOKEN }}
+          WEB_APP_URL=${{ vars.WEB_APP_URL }}
           EOF
 
       - name: Build and run

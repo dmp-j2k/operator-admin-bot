@@ -38,6 +38,7 @@ class AdminBot:
         self.register_dispatcher(dp)
         await check_admin_list()
         await self.bot.delete_webhook(drop_pending_updates=True)
+        print("admin -", await self.bot.get_me())
 
 
 admin_bot = AdminBot()

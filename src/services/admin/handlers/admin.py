@@ -16,7 +16,6 @@ from src.config.project_config import settings
 from src.services.operator_helper.bot import operator_bot
 from src.use_cases.chat_keyboard_use_case import get_chat_keyboards
 from ..filters.chat_type import ChatTypeFilter
-from ..filters.is_admin_bot import BotFilter
 from ..keyboards.admin_kb import create_admin_choosing, create_menu, back_button, deleting_messages_kb
 from ..schemas.chat_schema import ChatBase, ChatCreate
 from ..schemas.message_schema import MessageBase
@@ -27,9 +26,6 @@ from ..services.operator_service import operator_service
 
 router = Router()
 router.message.filter(ChatTypeFilter())
-router.message.filter(BotFilter())
-router.callback_query.filter(BotFilter())
-
 
 class IsSuperAdmin(BaseFilter):
     def __init__(self):
@@ -133,7 +129,8 @@ async def start_bot(message: Message | CallbackQuery):
 
 @router.message(F.text.lower() == 'добавить чаты')
 async def add_chat(message: Message):
-    link = 'https://t.me/helper_operator_bot?startgroup='
+    username = (await operator_bot.bot.get_me()).username
+    link = f'https://t.me/{username}?startgroup='
     await message.answer(f'Используйте ссылку ниже чтобы добавить бота в группу: {link}')
 
 

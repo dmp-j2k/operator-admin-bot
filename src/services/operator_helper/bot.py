@@ -25,5 +25,6 @@ class OperatorBot:
     async def start_bot(self, dp: Dispatcher):
         self.register_dispatcher(dp)
         await self.bot.delete_webhook(drop_pending_updates=True)
+        print("operator -", await self.bot.get_me())
 
 operator_bot = OperatorBot()

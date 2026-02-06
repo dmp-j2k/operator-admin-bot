@@ -12,7 +12,7 @@ from aiogram.types import CallbackQuery, Message, InputMediaPhoto, InputMediaDoc
 
 from sqlalchemy.exc import IntegrityError
 
-from config.project_config import settings
+from src.config.project_config import settings
 from ..schemas.chat_schema import ChatBase, ChatCreate
 
 from src.use_cases.chat_keyboard_use_case import get_chat_keyboards
@@ -43,7 +43,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
 async def menu(message: Message, state: FSMContext):
     await state.clear()
     message = await message.answer(start_message, reply_markup=create_menu())
-    await message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(
+    await message.answer("Или найдите чат в поиске", reply_markup=InlineKeyboardMarkup(
         row_width=1,
         inline_keyboard=[
             [
@@ -174,4 +174,4 @@ async def send_message_to_selected_chat(message: Message,
 
     await message.answer('Сообщение успешно отправлено!')
     await state.clear()
-    await activate_sender(message, state)
+    await menu(message, state)
