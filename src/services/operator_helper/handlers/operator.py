@@ -114,7 +114,7 @@ async def active_mail_message(call: CallbackQuery, state: FSMContext):
             await call.bot.delete_message(call.from_user.id, i)
 
     await call.message.answer(f"Выбранный чат: {chat.name}\nТеперь отправьте телефон клиента",
-                              reply_markup=back_to_choosing())
+                              reply_markup=back())
     await state.set_state(OrderSend.write_number)
 
 
