@@ -150,7 +150,7 @@ async def write_name(message: Message, state: FSMContext):
 
 async def except_when_send_video(send_video_func, *args, **kwargs) -> Message:
     chat_id = kwargs["chat_id"]
-    chat_name = kwargs["chat_name"]
+    chat_name = kwargs.pop("chat_name", None)
 
     try:
         r = await send_video_func(*args, **kwargs)
