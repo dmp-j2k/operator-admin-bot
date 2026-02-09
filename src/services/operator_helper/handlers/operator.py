@@ -131,11 +131,11 @@ def validate_phone_lib(phone: str, region: str = "RU") -> str | None:
 async def write_number(message: Message, state: FSMContext):
     phone = validate_phone_lib(message.text)
     if phone is None:
-        await message.answer("Введите корректный номер", reply_markup=back_to_choosing())
+        await message.answer("Введите корректный номер", reply_markup=back())
         return
 
     await state.update_data({'phone': phone})
-    await message.answer('Введите имя клиента', reply_markup=back_to_choosing())
+    await message.answer('Введите имя клиента', reply_markup=back())
     await state.set_state(OrderSend.write_name)
 
 
@@ -144,7 +144,7 @@ async def write_name(message: Message, state: FSMContext):
     phone = message.text
     # TODO: add validation if needed
     await state.update_data({'name': phone})
-    await message.answer('Введите имя клиента', reply_markup=back_to_choosing())
+    await message.answer('Введите комментарий', reply_markup=back())
     await state.set_state(OrderSend.write_comment)
 
 
@@ -226,7 +226,7 @@ async def send_message_to_selected_chat(message: Message,
                 text_data = ""
         send_message = await except_when_send_video(
             message.bot.send_message,
-            LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text),
+            text=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text),
             chat_id=chat_id,
             chat_name=message.chat.full_name,
         )
