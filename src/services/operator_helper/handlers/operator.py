@@ -67,12 +67,26 @@ async def menu(message: Message, state: FSMContext):
 @router.callback_query(F.data == 'back')
 async def prev_state(call: CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
+    data = await state.get_data()
     match current_state:
         case OrderSend.write_comment.state:
-            await write_name(call.message, state)
+            name = data.get('name', '')
+            await call.message.answer(
+                f"Текущее имя клиента: {name}\nВведите новое имя клиента",
+                reply_markup=back()
+            )
+            await state.set_state(OrderSend.write_name)
+
         case OrderSend.write_name.state:
-            await write_number(call.message, state)
+            phone = data.get('phone', '')
+            await call.message.answer(
+                f"Текущий номер клиента: {phone}\nВведите новый номер клиента",
+                reply_markup=back()
+            )
+            await state.set_state(OrderSend.write_number)
+
         case OrderSend.write_number.state:
+            await state.clear()
             await menu(call.message, state)
 
 
