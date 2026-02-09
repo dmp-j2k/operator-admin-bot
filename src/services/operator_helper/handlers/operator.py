@@ -244,14 +244,14 @@ async def send_message_to_selected_chat(message: Message,
         if message.text:
             send_message = await except_when_send_video(
                 message.bot.send_message,
-                text=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text if message.text else ''),
+                text=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.caption),
                 chat_id=chat_id,
                 chat_name=message.chat.full_name,
             )
         else:
             send_message = await except_when_send_video(
                 message.copy_to,
-                caption=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text if message.text else ''),
+                caption=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text),
                 chat_id=chat_id,
                 chat_name=message.chat.full_name,
             )
