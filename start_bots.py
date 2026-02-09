@@ -7,13 +7,13 @@ from aiogram.fsm.storage.base import DefaultKeyBuilder
 from aiogram.fsm.storage.redis import RedisStorage
 from fastapi import FastAPI, HTTPException, Header, Depends
 
-from src.services.operator_helper.keyboards.operator_kb import back_to_choosing
-from src.services.operator_helper.handlers.operator import OrderSend
 from src.config.project_config import settings
 from src.services.admin.bot import admin_bot
 from src.services.admin.middlewares.album_middleware import AlbumMiddleware
 from src.services.admin.middlewares.log_middleware import LogMiddleware
 from src.services.operator_helper.bot import operator_bot
+from src.services.operator_helper.handlers.operator import OrderSend
+from src.services.operator_helper.keyboards.operator_kb import back
 from src.services.operator_helper.services.chat_service import chat_service
 
 key_builder = DefaultKeyBuilder(with_bot_id=True)
@@ -53,7 +53,7 @@ async def send_photo(
     await bot.send_message(
         user_id,
         f"Выбранный чат: {chat.name}\nТеперь отправьте телефон клиента",
-        reply_markup=back_to_choosing()
+        reply_markup=back()
     )
 
     return {"status": "ok"}
