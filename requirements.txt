@@ -9,3 +9,5 @@ alembic==1.15.1
 fastapi[standard]==0.112.0
 uvicorn==0.38.0
 redis==7.1.0
+phonenumbers==9.0.23
+phonenumberslite

@@ -21,3 +21,13 @@ def back_to_choosing():
         ]
     ]
     return InlineKeyboardMarkup(row_width=1, inline_keyboard=kb)
+
+def back():
+    kb = [
+        [InlineKeyboardButton(text='Показать список чатов (старый)', callback_data='back')],
+        [InlineKeyboardButton(text='Показать список чатов (старый)', callback_data=f'1|0|0')],
+        [
+            InlineKeyboardButton(text="Открыть список чатов", web_app=WebAppInfo(url=settings.WEB_APP_URL))
+        ]
+    ]
+    return InlineKeyboardMarkup(row_width=1, inline_keyboard=kb)

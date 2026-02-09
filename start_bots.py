@@ -46,13 +46,13 @@ async def send_photo(
     )
 
     await state.update_data({'chat_id': int(group_id)})
-    await state.set_state(OrderSend.write_text)
+    await state.set_state(OrderSend.write_number)
 
     chat = await chat_service.get(group_id)
 
     await bot.send_message(
         user_id,
-        f"Выбранный чат: {chat.name}\nТеперь отправьте ваше сообщение",
+        f"Выбранный чат: {chat.name}\nТеперь отправьте телефон клиента",
         reply_markup=back_to_choosing()
     )
 
