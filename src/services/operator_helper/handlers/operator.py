@@ -210,7 +210,7 @@ async def send_message_to_selected_chat(message: Message,
         text_data = ''
         for msg in album:
             if msg.caption:
-                caption = LEAD_TEMPLATE.format(phone=phone, name=name, comment=msg.caption if msg.caption else '')
+                caption = LEAD_TEMPLATE.format(phone=phone, name=name, comment=msg.caption)
             else:
                 caption = None
             if msg.photo:
@@ -242,8 +242,8 @@ async def send_message_to_selected_chat(message: Message,
             else:
                 text_data = ""
         send_message = await except_when_send_video(
-            message.bot.send_message,
-            text=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text if message.text else ''),
+            message.copy_to,
+            caption=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text if message.text else ''),
             chat_id=chat_id,
             chat_name=message.chat.full_name,
         )
