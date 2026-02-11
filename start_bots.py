@@ -66,7 +66,7 @@ async def send_photo(
     )
 
     if not lead.files:
-        bot.send_message(group_id, message)
+        await bot.send_message(group_id, message)
     else:
         temp_files = await s3client.download_files(lead.files)
         try:
