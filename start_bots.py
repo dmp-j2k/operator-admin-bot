@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import os
 
 import uvicorn
@@ -71,7 +72,7 @@ async def send_photo(
         temp_files = await s3client.download_files(lead.files)
         try:
             media = [
-                InputMediaDocument(media=FSInputFile(tmp.path, filename=tmp.real_name))
+                InputMediaDocument(media=FSInputFile(tmp.path, filename=base64.b64decode(tmp.real_name).decode('utf-8')))
                 for tmp in temp_files
             ]
             media[-1].caption = message
