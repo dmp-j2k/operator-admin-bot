@@ -60,7 +60,7 @@ class S3Client:
         return result
 
 
-async def delete_files(self, file_keys: List[str]):
+    async def delete_files(self, file_keys: List[str]):
         async with self.session.create_client("s3", **self.config) as client:
             for key in file_keys:
                 await client.delete_object(
