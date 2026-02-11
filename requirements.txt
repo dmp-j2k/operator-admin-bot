@@ -11,3 +11,5 @@ uvicorn==0.38.0
 redis==7.1.0
 phonenumbers==9.0.23
 phonenumberslite
+aiobotocore==3.0.0
+aiofiles==23.2.1
