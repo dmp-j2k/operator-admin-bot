@@ -63,7 +63,7 @@ async def send_photo(
     message = LEAD_TEMPLATE.format(
         phone=lead.phone,
         name=lead.name,
-        comment=lead.comment,
+        comment=lead.comment if lead.comment else "-",
     )
 
     if not lead.files:
