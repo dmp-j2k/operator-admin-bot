@@ -90,6 +90,7 @@ async def send_photo(
                     pass
 
     await state.clear()
+    await bot.send_message(user_id, "Сообщение отправлено")
     message = await bot.send_message(user_id, start_message, reply_markup=create_menu())
     await message.answer("Или найдите чат в поиске", reply_markup=InlineKeyboardMarkup(
         row_width=1,
