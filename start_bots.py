@@ -50,6 +50,9 @@ async def send_photo(
     lead: LeadRequest,
     token: None = Depends(verify_bearer_token)  # pylint: disable=unused-argument
 ):
+    print(user_id, group_id)
+    print(lead)
+
     bot = operator_bot.bot
     state: FSMContext = operator_dp.fsm.get_context(
         bot=bot,
