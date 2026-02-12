@@ -33,6 +33,8 @@ LEAD_TEMPLATE = """
 \t{phone}
 👋🏾 Имя
 \t{name}
+Источник
+\t{source}
 📝 Комментарий
 {comment}
 """
@@ -157,7 +159,7 @@ async def write_name(message: Message, state: FSMContext):
     phone = message.text
     # TODO: add validation if needed
     await state.update_data({'name': phone})
-    await message.answer('Введите комментарий', reply_markup=back())
+    await message.answer('Укажите источник', reply_markup=back())
     await state.set_state(OrderSend.write_comment)
 
 
@@ -243,14 +245,14 @@ async def send_message_to_selected_chat(message: Message,
         if message.text:
             send_message = await except_when_send_video(
                 message.bot.send_message,
-                text=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.text),
+                text=LEAD_TEMPLATE.format(phone=phone, name=name, source=message.text, comment="-"),
                 chat_id=chat_id,
                 chat_name=message.chat.full_name,
             )
         else:
             send_message = await except_when_send_video(
                 message.copy_to,
-                caption=LEAD_TEMPLATE.format(phone=phone, name=name, comment=message.caption),
+                caption=LEAD_TEMPLATE.format(phone=phone, name=name, source=message.caption, comment="-"),
                 chat_id=chat_id,
                 chat_name=message.chat.full_name,
             )
