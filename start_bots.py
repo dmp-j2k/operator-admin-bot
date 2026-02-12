@@ -11,14 +11,13 @@ from aiogram.types import InputMediaDocument, FSInputFile, InlineKeyboardMarkup,
 from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel
 
-from src.services.operator_helper.keyboards.operator_kb import create_menu
-from src.services.operator_helper.handlers.operator import start_message, LEAD_TEMPLATE
-from src.s3_client import s3client
 from src.config.project_config import settings
+from src.s3_client import s3client
 from src.services.admin.bot import admin_bot
 from src.services.admin.middlewares.album_middleware import AlbumMiddleware
 from src.services.admin.middlewares.log_middleware import LogMiddleware
 from src.services.operator_helper.bot import operator_bot
+from src.services.operator_helper.handlers.operator import LEAD_TEMPLATE
 
 key_builder = DefaultKeyBuilder(with_bot_id=True)
 redis_storage = RedisStorage.from_url(settings.REDIS_URL, key_builder=key_builder)
@@ -91,9 +90,8 @@ async def send_photo(
                     pass
 
     await state.clear()
-    await bot.send_message(user_id, "Сообщение отправлено")
-    message = await bot.send_message(user_id, start_message, reply_markup=create_menu())
-    await message.answer("Или найдите чат в поиске", reply_markup=InlineKeyboardMarkup(
+    message = await bot.send_message(user_id, "Сообщение отправлено")
+    await message.answer("Выбрать чат для отправки", reply_markup=InlineKeyboardMarkup(
         row_width=1,
         inline_keyboard=[
             [

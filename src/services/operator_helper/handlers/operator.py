@@ -53,8 +53,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
 @router.message(Command('start'))
 async def menu(message: Message, state: FSMContext):
     await state.clear()
-    message = await message.answer(start_message, reply_markup=create_menu())
-    await message.answer("Или найдите чат в поиске", reply_markup=InlineKeyboardMarkup(
+    await message.answer("Выбрать чат для отправки", reply_markup=InlineKeyboardMarkup(
         row_width=1,
         inline_keyboard=[
             [
