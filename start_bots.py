@@ -39,6 +39,7 @@ async def verify_bearer_token(authorization: str | None = Header(None)):
 class LeadRequest(BaseModel):
     phone: str
     name: str
+    source: str
     comment: str
     files: list[str]
 
@@ -62,6 +63,7 @@ async def send_photo(
     message = LEAD_TEMPLATE.format(
         phone=lead.phone,
         name=lead.name,
+        source=lead.source,
         comment=lead.comment if lead.comment else "-",
     )
 
