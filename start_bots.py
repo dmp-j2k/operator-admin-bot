@@ -11,6 +11,8 @@ from aiogram.types import InputMediaDocument, FSInputFile, InlineKeyboardMarkup,
 from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel
 
+from src.models.chat_model import ChatModel
+from src.services.operator_helper.services.chat_service import chat_service
 from src.config.project_config import settings
 from src.s3_client import s3client
 from src.services.admin.bot import admin_bot
@@ -53,6 +55,9 @@ async def send_photo(
 ):
     print(user_id, group_id)
     print(lead)
+
+    chat: ChatModel = await chat_service.get(group_id)
+    chat_name = chat.name
 
     bot = operator_bot.bot
     state: FSMContext = operator_dp.fsm.get_context(
@@ -97,7 +102,7 @@ async def send_photo(
                     pass
 
     await state.clear()
-    message = await bot.send_message(user_id, "Сообщение отправлено")
+    message = await bot.send_message(user_id, "Сообщение отправлено в группу " + chat_name)
     await message.answer("Выбрать чат для отправки", reply_markup=InlineKeyboardMarkup(
         row_width=1,
         inline_keyboard=[
