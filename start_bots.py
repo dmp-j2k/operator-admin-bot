@@ -68,6 +68,7 @@ async def send_photo(
     )
 
     if not lead.files:
+        await bot.send_message(user_id, message)
         await bot.send_message(group_id, message)
     else:
         temp_files = await s3client.download_files(lead.files)
@@ -77,6 +78,10 @@ async def send_photo(
                 for tmp in temp_files
             ]
             media[-1].caption = message
+            await bot.send_media_group(
+                chat_id=user_id,
+                media=media,
+            )
             await bot.send_media_group(
                 chat_id=group_id,
                 media=media,
