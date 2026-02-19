@@ -1,5 +1,4 @@
 import asyncio
-import base64
 import os
 
 import uvicorn
@@ -11,15 +10,15 @@ from aiogram.types import InputMediaDocument, FSInputFile, InlineKeyboardMarkup,
 from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel
 
-from src.models.chat_model import ChatModel
-from src.services.operator_helper.services.chat_service import chat_service
 from src.config.project_config import settings
+from src.models.chat_model import ChatModel
 from src.s3_client import s3client
 from src.services.admin.bot import admin_bot
 from src.services.admin.middlewares.album_middleware import AlbumMiddleware
 from src.services.admin.middlewares.log_middleware import LogMiddleware
 from src.services.operator_helper.bot import operator_bot
 from src.services.operator_helper.handlers.operator import LEAD_TEMPLATE
+from src.services.operator_helper.services.chat_service import chat_service
 
 key_builder = DefaultKeyBuilder(with_bot_id=True)
 redis_storage = RedisStorage.from_url(settings.REDIS_URL, key_builder=key_builder)
@@ -78,21 +77,37 @@ async def send_photo(
     else:
         temp_files = await s3client.download_files(lead.files)
         try:
-            media = [
-                InputMediaDocument(media=FSInputFile(tmp.path, filename=base64.b64decode(tmp.real_name).decode('utf-8')))
-                for tmp in temp_files
-            ]
-            media[-1].caption = message
-            await bot.send_media_group(
-                chat_id=user_id,
-                media=media,
-            )
-            await bot.send_media_group(
-                chat_id=group_id,
-                media=media,
-            )
+            if (len(temp_files) == 1
+                and temp_files[0].real_name.lower().endswith(('.ogg', '.mp3', '.m4a'))):
+                tmp = temp_files[0]
+                audio = FSInputFile(tmp.path, filename=tmp.real_name)
 
-            await s3client.delete_files(lead.files)
+                await bot.send_voice(
+                    chat_id=user_id,
+                    voice=audio,
+                    caption=message,
+                )
+                await bot.send_voice(
+                    chat_id=group_id,
+                    voice=audio,
+                    caption=message,
+                )
+            else:
+                media = [
+                    InputMediaDocument(media=FSInputFile(tmp.path, filename=tmp.real_name))
+                    for tmp in temp_files
+                ]
+                media[-1].caption = message
+                await bot.send_media_group(
+                    chat_id=user_id,
+                    media=media,
+                )
+                await bot.send_media_group(
+                    chat_id=group_id,
+                    media=media,
+                )
+
+                await s3client.delete_files(lead.files)
         finally:
             for tmp in temp_files:
                 try:

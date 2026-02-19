@@ -1,3 +1,4 @@
+import base64
 import os
 import tempfile
 from dataclasses import dataclass
@@ -55,7 +56,7 @@ class S3Client:
                         await f.write(chunk)
 
                 body.close()
-                result.append(TempFile(path=tmp_path, real_name=real_name))
+                result.append(TempFile(path=tmp_path, real_name=base64.b64decode(real_name).decode('utf-8')))
 
         return result
 
