@@ -78,21 +78,37 @@ async def send_photo(
     else:
         temp_files = await s3client.download_files(lead.files)
         try:
-            media = [
-                InputMediaDocument(media=FSInputFile(tmp.path, filename=base64.b64decode(tmp.real_name).decode('utf-8')))
-                for tmp in temp_files
-            ]
-            media[-1].caption = message
-            await bot.send_media_group(
-                chat_id=user_id,
-                media=media,
-            )
-            await bot.send_media_group(
-                chat_id=group_id,
-                media=media,
-            )
+            if (len(temp_files) == 1
+                and temp_files[0].real_name.lower().endswith(('.ogg', '.mp3', '.m4a'))):
+                tmp = temp_files[0]
+                audio = FSInputFile(tmp.path, filename=base64.b64decode(tmp.real_name).decode('utf-8'))
 
-            await s3client.delete_files(lead.files)
+                await bot.send_voice(
+                    chat_id=user_id,
+                    voice=audio,
+                    caption=message,
+                )
+                await bot.send_voice(
+                    chat_id=group_id,
+                    voice=audio,
+                    caption=message,
+                )
+            else:
+                media = [
+                    InputMediaDocument(media=FSInputFile(tmp.path, filename=base64.b64decode(tmp.real_name).decode('utf-8')))
+                    for tmp in temp_files
+                ]
+                media[-1].caption = message
+                await bot.send_media_group(
+                    chat_id=user_id,
+                    media=media,
+                )
+                await bot.send_media_group(
+                    chat_id=group_id,
+                    media=media,
+                )
+
+                await s3client.delete_files(lead.files)
         finally:
             for tmp in temp_files:
                 try:
